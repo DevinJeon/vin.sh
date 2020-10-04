@@ -1,8 +1,6 @@
 - name: Install tmux (step 1/4)
-  apt:
     name: tmux
     state: latest
-  become: true
 
 - name: Install tmux - Create tmux.conf symbolic link (step 2/4)
   file:
