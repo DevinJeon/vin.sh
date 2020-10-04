@@ -10,23 +10,23 @@
     dest: /tmp/fpp
     remote_src: true
 
-- name: Install fpp - Remove /usr/share/fpp if it exists (step 3/7)
+- name: Install fpp - Remove /usr/local/share/fpp if it exists (step 3/7)
   file:
-    path: /usr/share/fpp
+    path: /usr/local/share/fpp
     state: absent
   become: true
 
-- name: Install fpp - Copy fpp to /usr/share/fpp (step 4/7)
+- name: Install fpp - Copy fpp to /usr/local/share/fpp (step 4/7)
   copy:
     src: /tmp/fpp
-    dest: /usr/share/
+    dest: /usr/local/share/
     mode: preserve
   become: true
 
 - name: Install fpp - Create symbolic link (step 6/7)
   file:
-    src: /usr/share/fpp/fpp
-    dest: /usr/bin/fpp
+    src: /usr/local/share/fpp/fpp
+    dest: /usr/local/bin/fpp
     state: link
     force: true
   become: true
