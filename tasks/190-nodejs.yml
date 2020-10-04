@@ -1,12 +1,9 @@
 ---
-- name: Install Node.js - Add apt repository for Node.js (1/2)
-  shell: "curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -"
-  args:
-    warn: false
+# Node.js should be installed from https://nodejs.org/en/
 
-- name: Install Node.js - Install Node.js package (step 1/2)
-  apt:
-    name: nodejs
-    state: latest
-  become: true
-
+- name: Create npm-global symbolic link
+  file:
+    src: "{{ playbook_dir }}/rc/npm-global"
+    dest: ~/.rc/npm-global
+    state: link
+    force: true
