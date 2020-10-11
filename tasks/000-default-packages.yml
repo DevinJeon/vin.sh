@@ -15,6 +15,7 @@
       - coreutils
       - gnu-sed
       - gnu-tar
+      - gh
     state: latest
 
 - name: Install python-pip - Download get-pip.py
