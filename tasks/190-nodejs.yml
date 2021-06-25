@@ -1,12 +1,51 @@
 ---
-- name: Install Node.js - Add apt repository for Node.js (1/2)
-  shell: "curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -"
-  args:
-    warn: false
-
-- name: Install Node.js - Install Node.js package (step 1/2)
-  apt:
-    name: nodejs
-    state: latest
+- name: Install Node.js - ensure temporary directory (step 1/8)
+  file:
+    path: /tmp/nodejs
+    state: directory
   become: true
 
+- name: Specify node filename (step 2/8)
+  command: echo "v14.17.1"
+  register: version
+
+- name: Install Node.js - Download and unarchive (step 3/8)
+  unarchive:
+    src: "https://nodejs.org/dist/{{ version.stdout }}/node-{{ version.stdout }}-linux-x64.tar.xz"
+    dest: /tmp/nodejs
+    remote_src: true
+  become: true
+
+- name: Remove /usr/local/lib/nodejs (step 4/8)
+  file:
+    path: /usr/local/lib/nodejs
+    state: absent
+  become: true
+
+- name: Move and rename directory (step 5/8)
+  command: "mv /tmp/nodejs/node-{{ version.stdout }}-linux-x64 /usr/local/lib/nodejs"
+  become: true
+
+- name: Create node symbolic link (step 6/8)
+  file:
+    src: "/usr/local/lib/nodejs/bin/node"
+    dest: /usr/bin/node
+    state: link
+    force: true
+  become: true
+
+- name: Create npm symbolic link (step 7/8)
+  file:
+    src: "/usr/local/lib/nodejs/bin/npm"
+    dest: /usr/bin/npm
+    state: link
+    force: true
+  become: true
+
+- name: Create npx symbolic link (step 8/8)
+  file:
+    src: "/usr/local/lib/nodejs/bin/npm"
+    dest: /usr/bin/npx
+    state: link
+    force: true
+  become: true
